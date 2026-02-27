@@ -3,7 +3,7 @@
 <html lang="en">
 <head><meta charset="utf-8"/>
 <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
-<title>TwoBodyLL</title><script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.1.10/require.min.js"></script>
+<title>EDforLLN</title><script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.1.10/require.min.js"></script>
 <style type="text/css">
     pre { line-height: 125%; }
 td.linenos .normal { color: inherit; background-color: transparent; padding-left: 5px; padding-right: 5px; }
@@ -7475,7 +7475,46 @@ a.anchor-link {
 </style>
 <!-- End of mermaid configuration --></head>
 <body class="jp-Notebook" data-jp-theme-light="true" data-jp-theme-name="JupyterLab Light">
-<main><div class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noOutputs" id="cell-id=c57620b8-6b67-4163-a2d4-f3f0fdecde03">
+<main><div class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noOutputs" id="cell-id=a7a6b198-b9fc-48bf-a878-16ee76aa6ca1">
+<div class="jp-Cell-inputWrapper" tabindex="0">
+<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
+</div>
+<div class="jp-InputArea jp-Cell-inputArea">
+<div class="jp-InputPrompt jp-InputArea-prompt">In [1]:</div>
+<div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
+<div class="cm-editor cm-s-jupyter">
+<div class="highlight hl-ipython3"><pre><span></span><span class="kn">from</span> <span class="nn">itertools</span> <span class="kn">import</span> <span class="n">permutations</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">from</span> <span class="nn">scipy.sparse</span> <span class="kn">import</span> <span class="n">diags</span>
+<span class="kn">from</span> <span class="nn">math</span> <span class="kn">import</span> <span class="n">factorial</span>
+</pre></div>
+</div>
+</div>
+</div>
+</div>
+</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noOutputs" id="cell-id=162b9bc0-f09e-40c6-94b0-ed2b7fe41a14">
+<div class="jp-Cell-inputWrapper" tabindex="0">
+<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
+</div>
+<div class="jp-InputArea jp-Cell-inputArea">
+<div class="jp-InputPrompt jp-InputArea-prompt">In [3]:</div>
+<div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
+<div class="cm-editor cm-s-jupyter">
+<div class="highlight hl-ipython3"><pre><span></span><span class="n">hbar2by2m</span> <span class="o">=</span> <span class="mf">0.5</span>
+<span class="n">rm</span> <span class="o">=</span> <span class="mi">1</span>
+<span class="n">g</span> <span class="o">=</span> <span class="mi">1</span>
+<span class="n">N</span> <span class="o">=</span> <span class="mi">3</span>          
+<span class="n">Lx</span> <span class="o">=</span> <span class="mi">1</span> <span class="o">*</span> <span class="n">rm</span>
+<span class="n">Lxnd</span> <span class="o">=</span> <span class="n">Lx</span> <span class="o">/</span> <span class="n">rm</span>
+<span class="n">nx</span> <span class="o">=</span> <span class="mi">20</span>        <span class="c1">#Hilbert space = nx^N</span>
+<span class="n">dx</span> <span class="o">=</span> <span class="n">Lxnd</span> <span class="o">/</span> <span class="n">nx</span>
+<span class="n">x</span> <span class="o">=</span> <span class="n">dx</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">nx</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+</div>
+</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell" id="cell-id=3ef5ebc8-92b5-49ba-a3ce-a108bc0b8218">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
@@ -7483,94 +7522,126 @@ a.anchor-link {
 <div class="jp-InputPrompt jp-InputArea-prompt">In [4]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
 <div class="cm-editor cm-s-jupyter">
-<div class="highlight hl-ipython3"><pre><span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
-<span class="kn">from</span> <span class="nn">scipy.optimize</span> <span class="kn">import</span> <span class="n">brentq</span>
-<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+<div class="highlight hl-ipython3"><pre><span></span><span class="c1"># ─── 1D second-derivative matrix (periodic BC) ─────────────────────────────────</span>
+<span class="n">D2_1d</span> <span class="o">=</span> <span class="p">(</span><span class="mf">1.0</span> <span class="o">/</span> <span class="n">dx</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span> <span class="o">*</span> <span class="n">diags</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span> <span class="o">-</span><span class="mi">2</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span> <span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span> <span class="n">shape</span><span class="o">=</span><span class="p">(</span><span class="n">nx</span><span class="p">,</span> <span class="n">nx</span><span class="p">))</span><span class="o">.</span><span class="n">toarray</span><span class="p">()</span>
+<span class="n">D2_1d</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="mf">1.0</span> <span class="o">/</span> <span class="n">dx</span><span class="o">**</span><span class="mi">2</span>
+<span class="n">D2_1d</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="mf">1.0</span> <span class="o">/</span> <span class="n">dx</span><span class="o">**</span><span class="mi">2</span>
+
+<span class="n">I</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">eye</span><span class="p">(</span><span class="n">nx</span><span class="p">)</span>
+
+<span class="k">def</span> <span class="nf">kron_list</span><span class="p">(</span><span class="n">mats</span><span class="p">):</span>
+    <span class="n">result</span> <span class="o">=</span> <span class="n">mats</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+    <span class="k">for</span> <span class="n">m</span> <span class="ow">in</span> <span class="n">mats</span><span class="p">[</span><span class="mi">1</span><span class="p">:]:</span>
+        <span class="n">result</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">kron</span><span class="p">(</span><span class="n">result</span><span class="p">,</span> <span class="n">m</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">result</span>
+
+<span class="n">dim</span> <span class="o">=</span> <span class="n">nx</span> <span class="o">**</span> <span class="n">N</span>  
+<span class="n">lap</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">dim</span><span class="p">,</span> <span class="n">dim</span><span class="p">))</span>
+
+<span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">N</span><span class="p">):</span>
+    <span class="n">mats</span> <span class="o">=</span> <span class="p">[</span><span class="n">I</span><span class="p">]</span> <span class="o">*</span> <span class="n">N</span>
+    <span class="n">mats</span><span class="p">[</span><span class="n">k</span><span class="p">]</span> <span class="o">=</span> <span class="n">D2_1d</span>
+    <span class="n">lap</span> <span class="o">+=</span> <span class="n">kron_list</span><span class="p">(</span><span class="n">mats</span><span class="p">)</span>
+
+<span class="n">V_diag</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">dim</span><span class="p">)</span>
+
+<span class="c1"># Map flat index -&gt; multi-index</span>
+<span class="k">def</span> <span class="nf">flat_to_multi</span><span class="p">(</span><span class="n">idx</span><span class="p">,</span> <span class="n">N</span><span class="p">,</span> <span class="n">nx</span><span class="p">):</span>
+    <span class="n">multi</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">N</span><span class="p">):</span>
+        <span class="n">multi</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">idx</span> <span class="o">%</span> <span class="n">nx</span><span class="p">)</span>
+        <span class="n">idx</span> <span class="o">//=</span> <span class="n">nx</span>
+    <span class="k">return</span> <span class="n">multi</span><span class="p">[::</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+
+<span class="k">for</span> <span class="n">flat</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">dim</span><span class="p">):</span>
+    <span class="n">multi</span> <span class="o">=</span> <span class="n">flat_to_multi</span><span class="p">(</span><span class="n">flat</span><span class="p">,</span> <span class="n">N</span><span class="p">,</span> <span class="n">nx</span><span class="p">)</span>
+    <span class="n">count</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">N</span><span class="p">):</span>
+        <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="n">N</span><span class="p">):</span>
+            <span class="k">if</span> <span class="n">multi</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">==</span> <span class="n">multi</span><span class="p">[</span><span class="n">j</span><span class="p">]:</span>
+                <span class="n">count</span> <span class="o">+=</span> <span class="mi">1</span>
+    <span class="n">V_diag</span><span class="p">[</span><span class="n">flat</span><span class="p">]</span> <span class="o">=</span> <span class="n">count</span> <span class="o">*</span> <span class="p">(</span><span class="n">g</span> <span class="o">/</span> <span class="n">dx</span><span class="p">)</span>
+
+<span class="n">H</span> <span class="o">=</span> <span class="o">-</span><span class="n">hbar2by2m</span> <span class="o">*</span> <span class="n">lap</span> <span class="o">+</span> <span class="n">np</span><span class="o">.</span><span class="n">diag</span><span class="p">(</span><span class="n">V_diag</span><span class="p">)</span>
+
+<span class="c1"># ─── Bosonic symmetrizer: average over all N! permutations ────────────────────</span>
+<span class="c1">#     For each permutation σ, build the permutation matrix P_σ that maps</span>
+<span class="c1">#     |x_{m0},...,x_{mN-1}&gt; -&gt; |x_{m_{σ(0)}},...,x_{m_{σ(N-1)}}&gt;</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Building symmetrizer for N=</span><span class="si">{</span><span class="n">N</span><span class="si">}</span><span class="s2">, dim=</span><span class="si">{</span><span class="n">dim</span><span class="si">}</span><span class="s2">..."</span><span class="p">)</span>
+
+<span class="n">S</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">dim</span><span class="p">,</span> <span class="n">dim</span><span class="p">))</span>
+<span class="n">perms</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">permutations</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="n">N</span><span class="p">)))</span>
+
+<span class="k">for</span> <span class="n">perm</span> <span class="ow">in</span> <span class="n">perms</span><span class="p">:</span>
+    <span class="n">P_perm</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">dim</span><span class="p">,</span> <span class="n">dim</span><span class="p">))</span>
+    <span class="k">for</span> <span class="n">flat_in</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">dim</span><span class="p">):</span>
+        <span class="n">multi_in</span> <span class="o">=</span> <span class="n">flat_to_multi</span><span class="p">(</span><span class="n">flat_in</span><span class="p">,</span> <span class="n">N</span><span class="p">,</span> <span class="n">nx</span><span class="p">)</span>
+        <span class="c1"># Apply permutation: particle k goes to position perm[k]</span>
+        <span class="n">multi_out</span> <span class="o">=</span> <span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">*</span> <span class="n">N</span>
+        <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">N</span><span class="p">):</span>
+            <span class="n">multi_out</span><span class="p">[</span><span class="n">perm</span><span class="p">[</span><span class="n">k</span><span class="p">]]</span> <span class="o">=</span> <span class="n">multi_in</span><span class="p">[</span><span class="n">k</span><span class="p">]</span>
+        <span class="c1"># Convert multi_out back to flat index</span>
+        <span class="n">flat_out</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">N</span><span class="p">):</span>
+            <span class="n">flat_out</span> <span class="o">=</span> <span class="n">flat_out</span> <span class="o">*</span> <span class="n">nx</span> <span class="o">+</span> <span class="n">multi_out</span><span class="p">[</span><span class="n">k</span><span class="p">]</span>
+        <span class="n">P_perm</span><span class="p">[</span><span class="n">flat_out</span><span class="p">,</span> <span class="n">flat_in</span><span class="p">]</span> <span class="o">=</span> <span class="mf">1.0</span>
+    <span class="n">S</span> <span class="o">+=</span> <span class="n">P_perm</span>
+
+<span class="n">S</span> <span class="o">/=</span> <span class="n">factorial</span><span class="p">(</span><span class="n">N</span><span class="p">)</span>   <span class="c1"># S = (1/N!) * sum_σ P_σ  — this is the bosonic projector</span>
+
+<span class="c1"># ─── Extract bosonic basis ─────────────────────────────────────────────────────</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"Diagonalizing symmetrizer..."</span><span class="p">)</span>
+<span class="n">eig_vals_S</span><span class="p">,</span> <span class="n">eig_vecs_S</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">eigh</span><span class="p">(</span><span class="n">S</span><span class="p">)</span>
+<span class="n">bosonic_mask</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">eig_vals_S</span> <span class="o">-</span> <span class="mf">1.0</span><span class="p">)</span> <span class="o">&lt;</span> <span class="mf">1e-10</span>
+<span class="n">bosonic_basis</span> <span class="o">=</span> <span class="n">eig_vecs_S</span><span class="p">[:,</span> <span class="n">bosonic_mask</span><span class="p">]</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Bosonic subspace dimension: </span><span class="si">{</span><span class="n">bosonic_basis</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+
+<span class="c1"># ─── Project and diagonalize ───────────────────────────────────────────────────</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"Projecting Hamiltonian onto bosonic subspace..."</span><span class="p">)</span>
+<span class="n">H_bosonic</span> <span class="o">=</span> <span class="n">bosonic_basis</span><span class="o">.</span><span class="n">T</span> <span class="o">@</span> <span class="n">H</span> <span class="o">@</span> <span class="n">bosonic_basis</span>
+
+<span class="n">eigenvalues</span><span class="p">,</span> <span class="n">eigenvectors</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">eigh</span><span class="p">(</span><span class="n">H_bosonic</span><span class="p">)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s2">"</span><span class="se">\n</span><span class="s2">Numerical energies:"</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">eigenvalues</span><span class="p">[:</span><span class="mi">40</span><span class="p">])</span>
 </pre></div>
 </div>
 </div>
 </div>
 </div>
+<div class="jp-Cell-outputWrapper">
+<div class="jp-Collapser jp-OutputCollapser jp-Cell-outputCollapser">
 </div>
-<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=998ebfae-e10d-4824-8dc9-ce24f8beab1f">
-<div class="jp-Cell-inputWrapper" tabindex="0">
-<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
+<div class="jp-OutputArea jp-Cell-outputArea">
+<div class="jp-OutputArea-child">
+<div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
+<div class="jp-RenderedText jp-OutputArea-output" data-mime-type="text/plain" tabindex="0">
+<pre>Building symmetrizer for N=3, dim=8000...
+Diagonalizing symmetrizer...
+Bosonic subspace dimension: 1540
+Projecting Hamiltonian onto bosonic subspace...
+
+Numerical energies:
+[  2.77315022  24.26151966  24.26151966  43.83310302  43.83310302
+  44.92192932  61.49474649  61.49474649  63.58104513  63.58104513
+  81.24347324  81.24347324 101.72502649 101.72502649 101.82594099
+ 101.82594099 120.20674081 120.20674081 120.43100848 120.43765281
+ 121.3942885  121.3942885  157.6163766  157.6163766  158.71775311
+ 169.77326265 169.77326265 177.00210917 177.00210917 177.23568157
+ 177.23568157 178.23189858 178.23189858 190.31052477 190.31052477
+ 190.33966747 190.33966747 208.87533187 208.87533187 208.94046402]
+</pre>
 </div>
-<div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
-</div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<p>For N = 2, the exact eigenergies are given by:
-$$E = \frac{1}{4}\left(\frac{2\pi n}{L}\right)^2 + k_n^2$$</p>
-<p>where $k_n$ are solutions to
-$$kL + 2\tan^{-1}(2\lambda k/g) = \pi n$$</p>
 </div>
 </div>
 </div>
-</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noOutputs" id="cell-id=4d1d9d61-14c4-4954-a477-5e2ad763b24c">
+</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noOutputs" id="cell-id=69770970-cf58-48cf-831d-372595755064">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
 <div class="jp-InputArea jp-Cell-inputArea">
 <div class="jp-InputPrompt jp-InputArea-prompt">In [5]:</div>
-<div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
-<div class="cm-editor cm-s-jupyter">
-<div class="highlight hl-ipython3"><pre><span></span><span class="k">def</span> <span class="nf">bethe_eq</span><span class="p">(</span><span class="n">k</span><span class="p">,</span> <span class="n">L</span><span class="p">,</span> <span class="n">c</span><span class="p">,</span> <span class="n">n</span><span class="p">,</span> <span class="n">m</span><span class="p">):</span>
-    <span class="c1">#print(m,n,2*n + m + 1)</span>
-    <span class="k">return</span> <span class="n">k</span><span class="o">*</span><span class="n">L</span> <span class="o">+</span> <span class="mi">2</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">arctan</span><span class="p">(</span><span class="mi">2</span><span class="o">*</span><span class="n">k</span><span class="o">/</span><span class="n">c</span><span class="p">)</span> <span class="o">-</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="o">*</span><span class="p">(</span><span class="mi">2</span><span class="o">*</span><span class="n">n</span> <span class="o">+</span> <span class="n">m</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span>
-
-<span class="k">def</span> <span class="nf">bethe_root</span><span class="p">(</span><span class="n">m</span><span class="p">,</span> <span class="n">n</span><span class="p">,</span> <span class="n">L</span><span class="p">,</span> <span class="n">c</span><span class="p">):</span>
-
-    <span class="k">try</span><span class="p">:</span>
-        <span class="c1"># The root is near pi*n/L; bracket it safely</span>
-        <span class="n">k0</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span> <span class="o">*</span> <span class="n">n</span> <span class="o">/</span> <span class="n">L</span> <span class="k">if</span> <span class="n">n</span> <span class="o">!=</span> <span class="mi">0</span> <span class="k">else</span> <span class="mf">1e-6</span>
-        <span class="n">margin</span> <span class="o">=</span> <span class="nb">abs</span><span class="p">(</span><span class="n">k0</span><span class="p">)</span> <span class="o">+</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span> <span class="o">/</span> <span class="n">L</span> <span class="o">+</span> <span class="mf">1.0</span>
-
-        <span class="n">a</span><span class="p">,</span> <span class="n">b</span> <span class="o">=</span> <span class="n">k0</span> <span class="o">-</span> <span class="n">margin</span><span class="p">,</span> <span class="n">k0</span> <span class="o">+</span> <span class="n">margin</span>
-
-        <span class="c1"># Make sure the bracket is valid (different signs)</span>
-        <span class="n">fa</span><span class="p">,</span> <span class="n">fb</span> <span class="o">=</span> <span class="n">bethe_eq</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">L</span><span class="p">,</span> <span class="n">c</span><span class="p">,</span> <span class="n">n</span><span class="p">,</span> <span class="n">m</span><span class="p">),</span> <span class="n">bethe_eq</span><span class="p">(</span><span class="n">b</span><span class="p">,</span> <span class="n">L</span><span class="p">,</span> <span class="n">c</span><span class="p">,</span> <span class="n">n</span><span class="p">,</span> <span class="n">m</span><span class="p">)</span>
-        <span class="k">if</span> <span class="n">fa</span> <span class="o">*</span> <span class="n">fb</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
-            <span class="c1"># Widen bracket</span>
-            <span class="n">margin</span> <span class="o">*=</span> <span class="mi">5</span>
-            <span class="n">a</span><span class="p">,</span> <span class="n">b</span> <span class="o">=</span> <span class="n">k0</span> <span class="o">-</span> <span class="n">margin</span><span class="p">,</span> <span class="n">k0</span> <span class="o">+</span> <span class="n">margin</span>
-
-        <span class="n">root</span> <span class="o">=</span> <span class="n">brentq</span><span class="p">(</span><span class="n">bethe_eq</span><span class="p">,</span> <span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">,</span> <span class="n">args</span><span class="o">=</span><span class="p">(</span><span class="n">L</span><span class="p">,</span> <span class="n">c</span><span class="p">,</span> <span class="n">n</span><span class="p">,</span> <span class="n">m</span><span class="p">))</span>
-    <span class="k">except</span><span class="p">:</span>
-        <span class="n">k_guess</span> <span class="o">=</span> <span class="n">k_guess</span> <span class="k">if</span> <span class="n">k_guess</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="k">else</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span> <span class="o">*</span> <span class="n">n</span> <span class="o">/</span> <span class="n">L</span>
-        <span class="n">root</span> <span class="o">=</span> <span class="n">fsolve</span><span class="p">(</span><span class="n">bethe_eq</span><span class="p">,</span> <span class="n">k_guess</span><span class="p">,</span> <span class="n">args</span><span class="o">=</span><span class="p">(</span><span class="n">L</span><span class="p">,</span> <span class="n">c</span><span class="p">,</span> <span class="n">n</span><span class="p">,</span> <span class="n">m</span><span class="p">))[</span><span class="mi">0</span><span class="p">]</span>
-
-    <span class="k">return</span> <span class="n">root</span>
-<span class="k">def</span> <span class="nf">bethe_energy</span><span class="p">(</span><span class="n">m</span><span class="p">,</span><span class="n">n</span><span class="p">,</span> <span class="n">L</span><span class="p">,</span> <span class="n">c</span><span class="p">):</span>
-    <span class="n">K</span> <span class="o">=</span> <span class="mi">2</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="o">*</span><span class="n">m</span><span class="o">/</span><span class="n">L</span>
-    <span class="n">k</span> <span class="o">=</span> <span class="n">bethe_root</span><span class="p">(</span><span class="n">m</span><span class="p">,</span> <span class="n">n</span><span class="p">,</span> <span class="n">L</span><span class="p">,</span> <span class="n">c</span><span class="p">)</span>
-    <span class="c1">#print("com",K**2/4, 're', k)</span>
-    <span class="k">return</span> <span class="n">K</span><span class="o">**</span><span class="mi">2</span><span class="o">/</span><span class="mi">4</span> <span class="o">+</span> <span class="n">k</span><span class="o">**</span><span class="mi">2</span>
-</pre></div>
-</div>
-</div>
-</div>
-</div>
-</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noOutputs" id="cell-id=98697902-2513-4912-953b-26560c1ce2c0">
-<div class="jp-Cell-inputWrapper" tabindex="0">
-<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
-</div>
-<div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In [12]:</div>
-<div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
-<div class="cm-editor cm-s-jupyter">
-<div class="highlight hl-ipython3"><pre><span></span><span class="c1"># Example parameters</span>
-<span class="n">L</span> <span class="o">=</span> <span class="mi">2</span>
-<span class="n">c</span> <span class="o">=</span> <span class="mi">1</span>
-</pre></div>
-</div>
-</div>
-</div>
-</div>
-</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noOutputs" id="cell-id=15fc55da-f15b-4b37-8f38-7ad81812589f">
-<div class="jp-Cell-inputWrapper" tabindex="0">
-<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
-</div>
-<div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In [13]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
 <div class="cm-editor cm-s-jupyter">
 <div class="highlight hl-ipython3"><pre><span></span><span class="c1">#Calculate the partition function and all its derivatives</span>
@@ -7586,27 +7657,20 @@ $$kL + 2\tan^{-1}(2\lambda k/g) = \pi n$$</p>
 </div>
 </div>
 </div>
-</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell" id="cell-id=8bd21b6a-837d-457d-a713-c260602cdeb4">
+</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell" id="cell-id=03675fa3-649a-47a1-b297-380c4ef92391">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
 <div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In [15]:</div>
+<div class="jp-InputPrompt jp-InputArea-prompt">In [8]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
 <div class="cm-editor cm-s-jupyter">
-<div class="highlight hl-ipython3"><pre><span></span><span class="n">T</span> <span class="o">=</span> <span class="mf">0.4</span>
+<div class="highlight hl-ipython3"><pre><span></span><span class="n">T</span> <span class="o">=</span> <span class="mi">8</span>
 <span class="n">evals</span> <span class="o">=</span> <span class="p">[]</span>
-<span class="c1">#Generate evals</span>
-<span class="k">for</span> <span class="n">m</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="o">-</span><span class="mi">8</span><span class="p">,</span><span class="mi">8</span><span class="p">):</span>
-    <span class="k">for</span> <span class="n">n</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">20</span><span class="p">,</span><span class="mi">1</span><span class="p">):</span>
-        <span class="k">if</span> <span class="p">(</span><span class="mi">2</span><span class="o">*</span><span class="n">n</span> <span class="o">+</span> <span class="n">m</span> <span class="o">+</span> <span class="mi">1</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">):</span>
-            <span class="c1">#k must be positive</span>
-            <span class="n">evals</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">bethe_energy</span><span class="p">(</span><span class="n">m</span><span class="p">,</span><span class="n">n</span><span class="p">,</span><span class="n">L</span><span class="p">,</span><span class="n">c</span><span class="p">))</span>
-<span class="nb">print</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">sort</span><span class="p">(</span><span class="n">evals</span><span class="p">))</span>
-<span class="n">Z1</span><span class="p">,</span> <span class="n">dZ1</span> <span class="o">=</span> <span class="n">ZanddZ</span><span class="p">(</span><span class="mi">1</span><span class="o">/</span><span class="n">T</span><span class="p">,</span><span class="n">evals</span><span class="p">)</span>
+<span class="n">Z1</span><span class="p">,</span> <span class="n">dZ1</span> <span class="o">=</span> <span class="n">ZanddZ</span><span class="p">(</span><span class="mi">1</span><span class="o">/</span><span class="n">T</span><span class="p">,</span><span class="n">eigenvalues</span><span class="p">)</span>
 <span class="n">AveE</span> <span class="o">=</span> <span class="o">-</span><span class="n">dZ1</span><span class="o">/</span><span class="n">Z1</span>
 <span class="n">AveE</span> <span class="o">=</span> <span class="n">AveE</span>
-<span class="nb">print</span><span class="p">(</span><span class="n">AveE</span><span class="o">/</span><span class="mi">2</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">AveE</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -7619,92 +7683,13 @@ $$kL + 2\tan^{-1}(2\lambda k/g) = \pi n$$</p>
 <div class="jp-OutputArea-child">
 <div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
 <div class="jp-RenderedText jp-OutputArea-output" data-mime-type="text/plain" tabindex="0">
-<pre>[4.26763244e-01 5.84049039e+00 5.84049039e+00 1.02963676e+01
- 1.02963676e+01 1.08393053e+01 2.07089097e+01 2.07089097e+01
- 2.55796992e+01 2.55796992e+01 2.56597383e+01 2.56597383e+01
- 3.99051808e+01 3.99051808e+01 4.04702140e+01 4.53989471e+01
- 4.53989471e+01 5.03177229e+01 5.03177229e+01 5.03398184e+01
- 5.03398184e+01 6.50581168e+01 6.50581168e+01 6.51471243e+01
- 6.51471243e+01 7.99486316e+01 7.99486316e+01 8.48773647e+01
- 8.48773647e+01 8.48863331e+01 8.48863331e+01 8.92532029e+01
- 8.92532029e+01 8.98227353e+01 9.96657449e+01 9.96657449e+01
- 9.96923397e+01 9.96923397e+01 1.24275743e+02 1.24275743e+02
- 1.24364751e+02 1.24364751e+02 1.24367324e+02 1.24367324e+02
- 1.29296654e+02 1.29296654e+02 1.29301153e+02 1.29301153e+02
- 1.44094991e+02 1.44094991e+02 1.44106533e+02 1.44106533e+02
- 1.58340434e+02 1.58340434e+02 1.58911575e+02 1.68752976e+02
- 1.68752976e+02 1.68781179e+02 1.68781179e+02 1.78649175e+02
- 1.78649175e+02 1.83582377e+02 1.83582377e+02 1.83584951e+02
- 1.83584951e+02 1.98383884e+02 1.98383884e+02 1.98389993e+02
- 1.98389993e+02 2.03325232e+02 2.03325232e+02 2.23064441e+02
- 2.23064441e+02 2.42802577e+02 2.42802577e+02 2.47736406e+02
- 2.47736406e+02 2.47738015e+02 2.47738015e+02 2.47738765e+02
- 2.57608370e+02 2.57608370e+02 2.62542858e+02 2.62542858e+02
- 2.87217183e+02 2.87217183e+02 3.02021822e+02 3.02021822e+02
- 3.16825245e+02 3.21760485e+02 3.21760485e+02 3.21761031e+02
- 3.21761031e+02 3.36565205e+02 3.36565205e+02 3.56304823e+02
- 3.61239448e+02 3.61239448e+02 3.66174428e+02 3.66174428e+02
- 3.95783241e+02 3.95783241e+02 4.05652436e+02 4.20457075e+02
- 4.20457075e+02 4.20457390e+02 4.20457390e+02 4.40196599e+02
- 4.40196599e+02 4.45131263e+02 4.45131263e+02 4.79675016e+02
- 4.79675016e+02 4.84609928e+02 4.94479532e+02 4.94479532e+02
- 5.14218494e+02 5.24088346e+02 5.24088346e+02 5.38892643e+02
- 5.38892643e+02 5.58632049e+02 5.58632049e+02 5.73436368e+02
- 5.73436368e+02 5.78371258e+02 5.78371258e+02 6.17849676e+02
- 6.17849676e+02 6.32654155e+02 6.42523598e+02 6.42523759e+02
- 6.42523759e+02 6.72132573e+02 6.72132573e+02 6.77067302e+02
- 6.77067302e+02 7.16545852e+02 7.16545852e+02 7.21480595e+02
- 7.21480595e+02 7.36285061e+02 7.36285061e+02 7.75763479e+02
- 7.75763479e+02 7.90567825e+02 8.00437540e+02 8.10307145e+02
- 8.10307145e+02 8.34981105e+02 8.34981105e+02 8.39915958e+02
- 8.39915958e+02 8.89263980e+02 8.89263980e+02 8.94198825e+02
- 8.94198825e+02 9.13938033e+02 9.13938033e+02 9.53416451e+02
- 9.53416451e+02 9.58351211e+02 9.87960103e+02 9.97829707e+02
- 9.97829707e+02 1.01263408e+03 1.01263408e+03 1.02743852e+03
- 1.02743852e+03 1.07678654e+03 1.07678654e+03 1.09159098e+03
- 1.09159098e+03 1.11133019e+03 1.11133019e+03 1.14587377e+03
- 1.15080861e+03 1.15080861e+03 1.19522185e+03 1.20509146e+03
- 1.20509146e+03 1.21002623e+03 1.21002623e+03 1.23470027e+03
- 1.23470027e+03 1.28404829e+03 1.28404829e+03 1.30872233e+03
- 1.30872233e+03 1.32846154e+03 1.32846154e+03 1.35313552e+03
- 1.36793995e+03 1.36793995e+03 1.42222280e+03 1.42715758e+03
- 1.42715758e+03 1.43209240e+03 1.43209240e+03 1.46170122e+03
- 1.46170122e+03 1.51104924e+03 1.51104924e+03 1.54559287e+03
- 1.54559287e+03 1.56533208e+03 1.56533208e+03 1.58013647e+03
- 1.60481050e+03 1.60481050e+03 1.66402813e+03 1.66402813e+03
- 1.66896294e+03 1.67883255e+03 1.67883255e+03 1.70844136e+03
- 1.70844136e+03 1.75778938e+03 1.75778938e+03 1.80220262e+03
- 1.80220262e+03 1.82194183e+03 1.82194183e+03 1.82687661e+03
- 1.86142024e+03 1.86142024e+03 1.92063787e+03 1.92063787e+03
- 1.93544229e+03 1.94531189e+03 1.94531189e+03 1.97492071e+03
- 1.97492071e+03 2.02426873e+03 2.02426873e+03 2.07855157e+03
- 2.07855157e+03 2.09335596e+03 2.09829077e+03 2.09829077e+03
- 2.13776919e+03 2.13776919e+03 2.19698682e+03 2.19698682e+03
- 2.22166084e+03 2.23153044e+03 2.23153044e+03 2.26113926e+03
- 2.26113926e+03 2.31048728e+03 2.31048728e+03 2.37463972e+03
- 2.37463972e+03 2.37957451e+03 2.39437893e+03 2.39437893e+03
- 2.43385734e+03 2.43385734e+03 2.49307497e+03 2.49307497e+03
- 2.52761859e+03 2.53748820e+03 2.53748820e+03 2.56709701e+03
- 2.56709701e+03 2.61644503e+03 2.61644503e+03 2.69046708e+03
- 2.69046708e+03 2.71020628e+03 2.71020628e+03 2.74968470e+03
- 2.74968470e+03 2.80890233e+03 2.85331556e+03 2.86318516e+03
- 2.86318516e+03 2.89279397e+03 2.89279397e+03 2.94214199e+03
- 3.02603364e+03 3.02603364e+03 3.04577285e+03 3.04577285e+03
- 3.08525127e+03 3.14446889e+03 3.19875172e+03 3.20862133e+03
- 3.20862133e+03 3.23823014e+03 3.28757816e+03 3.38133941e+03
- 3.38133941e+03 3.40107862e+03 3.44055704e+03 3.49977466e+03
- 3.56392710e+03 3.57379670e+03 3.60340551e+03 3.65275353e+03
- 3.75638439e+03 3.77612359e+03 3.81560201e+03 3.87481964e+03
- 3.95871128e+03 3.98832009e+03 4.03766812e+03 4.17090778e+03
- 4.21038620e+03 4.26960382e+03 4.39297388e+03 4.44232190e+03
- 4.62490959e+03 4.68412722e+03 4.86671490e+03 5.11838982e+03]
-0.21338879375280173
+<pre>6.042402681633625
 </pre>
 </div>
 </div>
 </div>
 </div>
-</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noOutputs" id="cell-id=2f5900da-ef7e-4012-b1cd-7bbd3b35d8a3">
+</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noOutputs" id="cell-id=c4ec27a7-1517-4b2b-a323-df28fa267217">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
